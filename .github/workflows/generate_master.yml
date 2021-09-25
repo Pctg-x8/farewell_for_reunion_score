@@ -1,0 +1,23 @@
+name: Score PDF Autobuild
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build PDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        uses: ./.github/actions/lilypond_generator
+        env:
+          SCORE_FILE: score.ly
+          OUTPUT_FILE: score
+      - name: publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: Score PDF
+          path: score.pdf
+          if-no-files-found: error
